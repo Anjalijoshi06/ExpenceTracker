@@ -1,0 +1,83 @@
+@model OrganizationSettingsViewModel
+@{
+    ViewData["Title"] = "Organization Settings";
+}
+
+<h2>Organization Settings</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Settings" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" disabled />
+                            <label asp-for="IsActive" class="form-check-label"></label>
+                        </div>
+                        <small class="form-text text-muted">
+                            Organization status can only be changed by the Super Administrator.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Update Settings</button>
+                        <a asp-action="Dashboard" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6>Organization Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Organization ID:</strong> @Model.Id</p>
+                <p><strong>Status:</strong> 
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </p>
+                <hr>
+                <h6>Quick Actions</h6>
+                <div class="d-grid gap-2">
+                    <a asp-action="Users" class="btn btn-outline-primary btn-sm">Manage Users</a>
+                    <a asp-action="Dashboard" class="btn btn-outline-info btn-sm">View Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

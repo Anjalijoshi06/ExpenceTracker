@@ -1,0 +1,181 @@
+@model OrganizationDashboardViewModel
+@{
+    ViewData["Title"] = "Organization Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>@Model.Organization.Name Dashboard</h2>
+        <p class="text-muted">@Model.Organization.Description</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.TotalUsers</h4>
+                        <p class="card-text">Total Users</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.ActiveUsers</h4>
+                        <p class="card-text">Active Users</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-check fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">$@Model.TotalExpenses.ToString("N2")</h4>
+                        <p class="card-text">Total Expenses</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-dollar-sign fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.TotalCategories</h4>
+                        <p class="card-text">Categories</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-tags fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Users</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentUsers.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model.RecentUsers)
+                                {
+                                    <tr>
+                                        <td>@user.FullName</td>
+                                        <td>@user.Email</td>
+                                        <td>
+                                            @if (user.IsOrganizationOwner)
+                                            {
+                                                <span class="badge bg-danger">Owner</span>
+                                            }
+                                            else if (user.Permission?.PermissionName == "Manager")
+                                            {
+                                                <span class="badge bg-warning">Manager</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Employee</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (user.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Inactive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No users found.</p>
+                }
+                <div class="mt-3">
+                    <a asp-action="Users" class="btn btn-primary btn-sm">Manage Users</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Expenses</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentExpenses.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var expense in Model.RecentExpenses)
+                                {
+                                    <tr>
+                                        <td>@expense.Title</td>
+                                        <td>$@expense.Amount.ToString("N2")</td>
+                                        <td>@expense.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No expenses found.</p>
+                }
+                <div class="mt-3">
+                    <a asp-controller="Expenses" asp-action="Index" class="btn btn-primary btn-sm">View All Expenses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

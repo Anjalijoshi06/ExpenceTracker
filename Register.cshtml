@@ -1,0 +1,106 @@
+@model CreateOrganizationViewModel
+
+@{
+    ViewData["Title"] = "Register Organization";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Register Your Organization</h3>
+                <p class="mb-0">Create a new organization account to get started with expense tracking</p>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Organization Registration:</strong> Only organizations can register. Individual user accounts will be created by organization owners from their dashboard.
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <h5 class="border-bottom pb-2 mb-3">Organization Information</h5>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter your organization name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of your organization (optional)"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">Organization Owner Details</h5>
+                    
+                    <div class="mb-3">
+                        <label asp-for="OwnerName" class="form-label"></label>
+                        <input asp-for="OwnerName" class="form-control" placeholder="Full name of organization owner" />
+                        <span asp-validation-for="OwnerName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="OwnerEmail" class="form-label"></label>
+                        <input asp-for="OwnerEmail" class="form-control" placeholder="owner@yourorganization.com" />
+                        <span asp-validation-for="OwnerEmail" class="text-danger"></span>
+                        <div class="form-text">This will be used as the login email for the organization owner.</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label"></label>
+                                <input asp-for="ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Important:</strong> As the organization owner, you will have full control over:
+                        <ul class="mb-0 mt-2">
+                            <li>Creating and managing users within your organization</li>
+                            <li>Managing expense categories and permissions</li>
+                            <li>Viewing all organizational data and reports</li>
+                            <li>Organization settings and configuration</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-building"></i> Register Organization
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p>Already have an account? <a asp-action="Login">Sign in here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

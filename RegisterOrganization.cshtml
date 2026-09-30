@@ -1,0 +1,137 @@
+@model ExpenseTrackerApp.ViewModels.RegisterOrganizationViewModel
+@{
+    ViewData["Title"] = "Create Organization";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-building"></i> Create New Organization
+                    </h4>
+                    <p class="mb-0 mt-2">Set up your organization and admin account</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="RegisterOrganization" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <!-- Organization Information -->
+                        <div class="section-header mb-3">
+                            <h5 class="text-primary">
+                                <i class="fas fa-building"></i> Organization Information
+                            </h5>
+                            <hr>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label asp-for="OrganizationName" class="form-label">Organization Name *</label>
+                                <input asp-for="OrganizationName" class="form-control" placeholder="Enter your organization name" />
+                                <span asp-validation-for="OrganizationName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="OrganizationDescription" class="form-label">Organization Description</label>
+                            <textarea asp-for="OrganizationDescription" class="form-control" rows="3" 
+                                      placeholder="Brief description of your organization (optional)"></textarea>
+                            <span asp-validation-for="OrganizationDescription" class="text-danger"></span>
+                        </div>
+
+                        <!-- Admin User Information -->
+                        <div class="section-header mb-3">
+                            <h5 class="text-success">
+                                <i class="fas fa-user-shield"></i> Admin Account Information
+                            </h5>
+                            <hr>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label">First Name *</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label">Last Name *</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email Address *</label>
+                            <input asp-for="Email" class="form-control" type="email" placeholder="Enter your email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label">Password *</label>
+                                <input asp-for="Password" class="form-control" type="password" placeholder="Enter a strong password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password *</label>
+                                <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Confirm your password" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Features Information -->
+                        <div class="bg-light p-3 rounded mb-4">
+                            <h6 class="text-info mb-2">
+                                <i class="fas fa-star"></i> What you'll get:
+                            </h6>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check text-success"></i> Complete expense tracking system</li>
+                                <li><i class="fas fa-check text-success"></i> User management with custom permissions</li>
+                                <li><i class="fas fa-check text-success"></i> Detailed reporting and analytics</li>
+                                <li><i class="fas fa-check text-success"></i> Category management</li>
+                                <li><i class="fas fa-check text-success"></i> Data export capabilities</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-rocket"></i> Create Organization & Account
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="text-muted">
+                            Already have an account? 
+                            <a href="@Url.Action("Login", "Account")" class="text-decoration-none">Sign in here</a>
+                        </p>
+                        <p class="text-muted">
+                            Want to join an existing organization? 
+                            <a href="@Url.Action("Register", "Account")" class="text-decoration-none">Register as user</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.section-header h5 {
+    margin-bottom: 10px;
+}
+
+.section-header hr {
+    margin-top: 5px;
+    border-color: #dee2e6;
+}
+
+.bg-light.p-3.rounded {
+    border-left: 4px solid #17a2b8;
+}
+
+.list-unstyled li {
+    padding: 2px 0;
+}
+</style>

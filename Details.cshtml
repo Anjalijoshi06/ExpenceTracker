@@ -1,0 +1,62 @@
+@model ExpenseTrackerApp.ViewModels.ExpenseViewModel
+
+@{
+    ViewData["Title"] = "Expense Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4><i class="fas fa-eye"></i> Expense Details</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Title:</dt>
+                    <dd class="col-sm-9">@Model.Title</dd>
+
+                    <dt class="col-sm-3">Amount:</dt>
+                    <dd class="col-sm-9">
+                        <span class="h5 text-danger">₹@Model.Amount.ToString("N2")</span>
+                    </dd>
+
+                    <dt class="col-sm-3">Category:</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-secondary">@Model.CategoryName</span>
+                    </dd>
+
+                    <dt class="col-sm-3">Expense Date:</dt>
+                    <dd class="col-sm-9">@Model.ExpenseDate.ToString("MMMM dd, yyyy")</dd>
+
+                    <dt class="col-sm-3">Created By:</dt>
+                    <dd class="col-sm-9">@Model.UserName</dd>
+
+                    <dt class="col-sm-3">Created Date:</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate?.ToString("MMMM dd, yyyy - hh:mm tt")</dd>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                    }
+                </dl>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

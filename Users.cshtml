@@ -1,0 +1,143 @@
+@model List<ApplicationUser>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Organization Users</h2>
+    <a asp-action="CreateUser" class="btn btn-success">
+        <i class="fas fa-user-plus"></i> Create New User
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.IsOrganizationOwner)
+                                    {
+                                        <span class="badge bg-danger">Owner</span>
+                                    }
+                                    else if (user.Permission?.PermissionName == "Manager")
+                                    {
+                                        <span class="badge bg-warning">Manager</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Employee</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                </td>
+                                <td>@user.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                <td>
+                                    @if (!user.IsOrganizationOwner)
+                                    {
+                                        <div class="btn-group" role="group">
+                                            <form asp-action="ToggleUserStatus" method="post" style="display: inline;">
+                                                <input type="hidden" name="userId" value="@user.Id" />
+                                                <button type="submit" class="btn btn-sm @(user.IsActive ? "btn-warning" : "btn-success")" 
+                                                        onclick="return confirm('Are you sure you want to @(user.IsActive ? "deactivate" : "activate") this user?')">
+                                                    @(user.IsActive ? "Deactivate" : "Activate")
+                                                </button>
+                                            </form>
+                                            @if (!user.IsActive)
+                                            {
+                                                <form asp-action="DeleteUser" method="post" style="display: inline;">
+                                                    <input type="hidden" name="userId" value="@user.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-danger ms-1" 
+                                                            onclick="return confirm('Are you sure you want to permanently delete this user? This action cannot be undone.')">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Organization Owner</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <p class="text-muted">No users found in your organization.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Invite User Modal -->
+<div class="modal fade" id="inviteUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invite New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-info">
+                    <i class="fas fa-info-circle"></i>
+                    To invite a new user, direct them to register on the system and provide them with your organization name. 
+                    New users can be promoted to managers after registration.
+                </p>
+                <div class="alert alert-light">
+                    <strong>Registration URL:</strong><br>
+                    <code>@Url.Action("Register", "Account", null, Context.Request.Scheme)</code>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
